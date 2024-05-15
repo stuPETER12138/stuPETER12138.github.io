@@ -23,12 +23,12 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v2
         with:
           # 选择要使用的 pnpm 版本
           version: 8
           # 使用 pnpm 安装依赖
-          run_install: false
+          run_install: true
 
       # 安装Node环境
       - name: Setup Node.js
