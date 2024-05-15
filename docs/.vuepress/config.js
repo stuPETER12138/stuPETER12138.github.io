@@ -4,7 +4,10 @@ import { defineUserConfig } from 'vuepress'
 
 export default defineUserConfig({
     bundler: viteBundler(),
-    theme: defaultTheme(),
+    theme: defaultTheme({
+        // logo
+        // ......
+    }),
 
     lang: 'zh-CN',
     title: '欢迎来到我的博客世界',
