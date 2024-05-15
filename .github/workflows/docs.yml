@@ -28,7 +28,7 @@ jobs:
           # 选择要使用的 pnpm 版本
           version: 8
           # 使用 pnpm 安装依赖
-          run_install: true
+          run_install: false
 
       # 安装Node环境
       - name: Setup Node.js
