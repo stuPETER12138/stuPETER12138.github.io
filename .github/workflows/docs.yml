@@ -14,6 +14,9 @@ jobs:
     # 服务器环境：最新版 Ubuntu
     runs-on: ubuntu-latest
     # 任务的运行步骤。“-”表示一个步骤，从上至下一次执行
+    strategy:
+      matrix:
+        node-version: [20]
     steps:
       # 克隆该仓库的源码到工作流中
       - name: Clon Code
@@ -22,22 +25,20 @@ jobs:
           # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
         with:
           # 选择要使用的 pnpm 版本
-          version: 8
+          version: 9
           # 使用 pnpm 安装依赖
-          run_install: true
+          # run_install: true
 
       # 安装Node环境
-      - name: Setup Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          # 选择要使用的 node 版本
-          node-version: 20
-          # 缓存 pnpm 依赖
-          cache: pnpm
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       # 运行构建脚本
       - name: Build VuePress site
