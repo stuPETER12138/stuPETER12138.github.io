@@ -22,13 +22,13 @@ jobs:
           # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          # 选择要使用的 pnpm 版本
-          version: 8
-          # 使用 pnpm 安装依赖
-          run_install: true
+      # - name: Setup pnpm
+      #  uses: pnpm/action-setup@v3
+      #  with:
+       #   # 选择要使用的 pnpm 版本
+        #  version: 8
+         # # 使用 pnpm 安装依赖
+          #run_install: true
 
       # 安装Node环境
       - name: Setup Node.js
@@ -37,7 +37,25 @@ jobs:
           # 选择要使用的 node 版本
           node-version: 20
           # 缓存 pnpm 依赖
-          cache: pnpm
+          # cache: pnpm
+
+      # 缓存 yarn node_modles
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+           path: |
+             **/node_modules
+           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+           restore-keys: |
+             ${{ runner.os }}-yarn-
+
+      # 安装依赖 yarn
+      - name: Install dependencies
+         # 如果没有命中缓存才执行 npm install
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: yarn --frozen-lockfile
+
 
       # 运行构建脚本
       - name: Build VuePress site
