@@ -3,6 +3,14 @@ import { defaultTheme } from '@vuepress/theme-default'
 import { defineUserConfig } from 'vuepress'
 
 export default defineUserConfig({
+  extendsMarkdown: md => {
+    md.use(require('markdown-it-katex'))
+    md.linkify.set({ fuzzyEmail: false })
+  },
   bundler: viteBundler(),
   theme: defaultTheme(),
+
+  lang: 'zh-CN',
+  title: '魔法窝瓜的markdown们',
+  description: '窝的markdown笔记'
 })
