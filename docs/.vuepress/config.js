@@ -3,6 +3,16 @@ import { defaultTheme } from '@vuepress/theme-default'
 import { defineUserConfig } from 'vuepress'
 
 export default defineUserConfig({
+  markdown: {
+    // markdown-it-anchor 的选项
+    anchor: { permalink: false },
+    // markdown-it-toc 的选项
+    toc: { includeLevel: [1, 2] },
+    extendMarkdown: md => {
+      // 使用更多的 markdown-it 插件!
+      md.use(require('markdown-it-mathjax3'))
+    },
+  },
   bundler: viteBundler(),
  
   lang: 'zh-CN',
@@ -21,11 +31,11 @@ export default defineUserConfig({
       // NaverGroup
       {
         text: '名字一',
-        children: '/name1/',
+        link: '/name1/',
       },
       {
         text: '名字二',
-        children: '/name2/',
+        link: '/name2/',
       },
     ],
     // 侧边栏设置
