@@ -1,10 +1,6 @@
-<!-- frontmatter -->
-<!-- Frontmatter 是页面级作用域的配置 -->
-
 ---
-
+home: true
 lang: zh-CN
 title: 魔法窝瓜的markdown们
-description: 窝的markdown笔记
-
+footer: MIT Licensed | Copyright © 2024-present 魔法窝瓜的markdown们 All Rights Reserved.
 ---
