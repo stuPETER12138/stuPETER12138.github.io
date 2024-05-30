@@ -21,7 +21,7 @@ export default defineUserConfig({
       // NaverGroup
       {
         text: '名字一',
-        children: ['/name1/pdf.md'],
+        children: ['/name1/pdf.md', '/docs/name1/2101.03961v3.pdf'],
       },
       {
         text: '名字二',
