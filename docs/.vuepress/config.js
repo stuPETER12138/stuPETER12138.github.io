@@ -21,10 +21,10 @@ export default defineUserConfig({
       // NaverGroup
       {
         text: '名字一',
-        items:[
+        items: [
           {
             text: 'pdf',
-            link: '/name1/pdf.md',
+            children: ['/name1/pdf.md'],
           }
         ]
       },
