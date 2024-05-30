@@ -1,1 +1,1 @@
-[一篇文章](../.vuepress/public/2101.03961v3)
+[一篇文章](../.vuepress/public/2101.03961v3.pdf)
