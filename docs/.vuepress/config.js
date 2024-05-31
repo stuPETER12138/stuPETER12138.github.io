@@ -23,7 +23,7 @@ export default defineUserConfig({
       {
         text: '学习记录',
         prefix: '/studying/',
-        children: ['smd.md'],
+        children: ['smd.md', 'test.md'],
       },
     ],
 
