@@ -22,7 +22,8 @@ export default defineUserConfig({
       // NaverGroup
       {
         text: '学习记录',
-        children: ['/studying/test.md'],
+        prefix: '/studying/',
+        children: ['test.md'],
       },
       {
         text: '学习记录',
