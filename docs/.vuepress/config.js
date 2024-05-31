@@ -21,12 +21,12 @@ export default defineUserConfig({
       },
       // NaverGroup
       {
-        text: '',
-        prefix: '/name1/',
-        children: ['pdf.md'],
+        text: '学习记录',
+        prefix: '/studying/',
+        children: ['studied2.5h.md'],
       },
       {
-        text: '名字二',
+        text: '',
         link: '/name2/',
       },
     ],
