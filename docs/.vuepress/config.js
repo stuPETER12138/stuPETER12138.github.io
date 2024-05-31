@@ -9,7 +9,8 @@ export default defineUserConfig({
   title: '魔法窝瓜的markdown们',
   description: '窝的markdown笔记',
   theme: defaultTheme({
-    // 主题配置
+    logo: '/images/magicsquash.jpg',
+    repo: 'https://github.com/stuPETER12138/stuPETER12138.github.io',
 
     // 导航栏设置
     navbar: [
@@ -20,26 +21,17 @@ export default defineUserConfig({
       },
       // NaverGroup
       {
-        text: '名字一',
-        children: ['/name1/pdf.md', '/docs/name1/2101.03961v3.pdf'],
+        text: '',
+        prefix: '/name1/',
+        children: ['pdf.md'],
       },
       {
         text: '名字二',
         link: '/name2/',
       },
     ],
+
     // 侧边栏设置
-    sidebar: {
-      '/name1/': [       
-        {
-          text: '名字一',
-        },
-      ],
-      '/name2/': [
-        {
-          text: '名字二',
-        },
-      ],
-    }
+    sidebar: 'auto',
   }),
 })
