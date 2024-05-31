@@ -24,6 +24,10 @@ export default defineUserConfig({
         text: '学习记录',
         children: ['/studying/test.md'],
       },
+      {
+        text: '学习记录',
+        children: ['/studying/test.md'],
+      },
     ],
 
     // 侧边栏设置
