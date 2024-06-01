@@ -1,1 +1,5 @@
-node_modules
+references/
+node_modules/
+hope_docs/.vuepress/.cache/
+hope_docs/.vuepress/.temp/
+hope_docs/.vuepress/dist/

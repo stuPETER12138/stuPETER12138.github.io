@@ -4,17 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:dev": "vuepress-vite dev hope_docs",
+    "docs:build": "vuepress-vite build hope_docs",
+    "docs:clean-dev": "vuepress-vite dev hope_docs --clean-cache",
+    "docs:update-package": "pnpm dlx vp-update"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@vuepress/bundler-vite": "2.0.0-rc.10",
+    "@vuepress/bundler-vite": "2.0.0-rc.12",
     "@vuepress/theme-default": "2.0.0-rc.28",
     "vue": "^3.4.27",
-    "vuepress": "2.0.0-rc.10"
+    "vuepress": "2.0.0-rc.12",
+    "vuepress-theme-hope": "2.0.0-rc.47"
   },
   "dependencies": {
     "markdown-it": "^14.1.0",

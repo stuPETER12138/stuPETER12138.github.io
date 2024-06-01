@@ -1,4 +1,4 @@
-我的markdown学习（1/n）
+我的markdown学习
 =
 
 markdown语法汇总
