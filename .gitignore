@@ -1,4 +1,5 @@
 references/
+docs/
 node_modules/
 hope_docs/.vuepress/.cache/
 hope_docs/.vuepress/.temp/
