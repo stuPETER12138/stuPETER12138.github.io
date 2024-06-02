@@ -8,7 +8,7 @@ export default {
   description: "!",
   theme: hopeTheme({ 
     // 主题配置
-    // pure: true,
+    pure: true,
     darkmode: 'toggle',
     logo: '/images/magicsquash.jpg',
     repo: 'stuPETER12138/stuPETER12138.github.io',
