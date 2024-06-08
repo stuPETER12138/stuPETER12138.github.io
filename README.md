@@ -1,3 +1,6 @@
+![Static Badge](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-blue)
+
+
 ### 目录结构
 
 ```
