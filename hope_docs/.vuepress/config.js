@@ -1,9 +1,9 @@
 import { viteBundler } from '@vuepress/bundler-vite';
 import { hopeTheme } from "vuepress-theme-hope";
 import { mdEnhancePlugin } from 'vuepress-plugin-md-enhance';
-import { useDarkmode } from "vuepress-theme-hope/client";
-const { isDarkmode } = useDarkmode();
-console.log(isDarkmode.value); // get darkmode status
+// import { useDarkmode } from "vuepress-theme-hope/client";
+// const { isDarkmode } = useDarkmode();
+// console.log(isDarkmode.value); // get darkmode status
 
 export default {
   bundler: viteBundler(), // 确定打包工具
