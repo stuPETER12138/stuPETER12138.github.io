@@ -20,7 +20,7 @@ export default {
 
   theme: hopeTheme({ 
     // 主题配置
-    // pure: true,
+     pure: false,
     darkmode: 'toggle',
     logo: '/images/magicsquash.jpg',
     repo: 'stuPETER12138/stuPETER12138.github.io',

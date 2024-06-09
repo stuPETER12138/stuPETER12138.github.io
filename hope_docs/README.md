@@ -1,13 +1,14 @@
 ---
 home: true
-# layout: BlogHome
-icon: start image
-staet image: images/magicsquash.jpg
+layout: BlogHome
+portfolio: true
+# icon: start image
+# staet image: images/magicsquash.jpg
 title: 魔法窝瓜
 # heroImage: https://theme-hope-assets.vuejs.press/logo.svg
-# heroText: 你博客的名称
-heroFullScreen: true
-# tagline: 你可以在这里放置你的口号与标语
+heroText: 👋你好，我是魔法窝瓜
+# heroFullScreen: true
+tagline: 一个淡淡的大学生
 projects:
   - icon: project
     name: 项目名称
@@ -41,9 +42,3 @@ projects:
 
 footer: MIT 协议 | 版权所有 © 2024 魔法窝瓜
 ---
-
-这是一个博客主页的案例。
-
-要使用此布局，你应该在页面前端设置 `layout: BlogHome` 和 `home: true`。
-
-相关配置文档请见 [博客主页](https://theme-hope.vuejs.press/zh/guide/blog/home.html)。
