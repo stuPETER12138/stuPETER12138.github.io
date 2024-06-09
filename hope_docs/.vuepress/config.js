@@ -1,6 +1,6 @@
-import { viteBundler } from '@vuepress/bundler-vite';
-import { hopeTheme } from "vuepress-theme-hope";
-import { mdEnhancePlugin } from 'vuepress-plugin-md-enhance';
+import { viteBundler } from '@vuepress/bundler-vite'
+import { hopeTheme } from "vuepress-theme-hope"
+import { mdEnhancePlugin } from 'vuepress-plugin-md-enhance'
 
 export default {
   bundler: viteBundler(), // 确定打包工具
