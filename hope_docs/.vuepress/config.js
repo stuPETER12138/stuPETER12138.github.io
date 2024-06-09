@@ -1,11 +1,20 @@
-import { viteBundler } from '@vuepress/bundler-vite'
-import { hopeTheme } from "vuepress-theme-hope"
+import { viteBundler } from '@vuepress/bundler-vite';
+import { hopeTheme } from "vuepress-theme-hope";
+import { mdEnhancePlugin } from 'vuepress-plugin-md-enhance';
 
 export default {
   bundler: viteBundler(), // 确定打包工具
   lang: "zh-CN",
   title: "魔法窝瓜",
   description: "!",
+
+  Plugins: [
+    mdEnhancePlugin({
+      katex: true,
+      // mathjax: true,
+    }),
+  ],
+
   theme: hopeTheme({ 
     // 主题配置
     pure: true,
