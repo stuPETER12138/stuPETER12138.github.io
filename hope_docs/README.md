@@ -1,7 +1,8 @@
 ---
 home: true
 # layout: BlogHome
-icon: images/magicsquash.jpg
+icon: start image
+staet image: images/magicsquash.jpg
 title: 魔法窝瓜
 # heroImage: https://theme-hope-assets.vuejs.press/logo.svg
 # heroText: 你博客的名称

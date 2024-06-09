@@ -20,12 +20,13 @@ export default {
 
   theme: hopeTheme({ 
     // 主题配置
-    pure: true,
-    darkmode: 'auto',
+    // pure: true,
+    darkmode: 'toggle',
     logo: '/images/magicsquash.jpg',
     repo: 'stuPETER12138/stuPETER12138.github.io',
     repoLabel: 'GitHub',
     repoDisplay: true,
+    fullscreen: true,
     navbar: [
       {
         text: '学习记录',
