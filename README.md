@@ -1,5 +1,4 @@
-![Static Badge](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-blue)
-
+![Who I am](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-Magic_Squash-green) ![Static Badge](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-blue)
 
 ### 目录结构
 
