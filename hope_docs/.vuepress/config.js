@@ -14,6 +14,7 @@ export default {
     plugins: {
       mdEnhance: {
         katex: true, 
+        // mathjax: true,
         sup: true,
         sub: true,
       },
