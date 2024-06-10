@@ -14,20 +14,21 @@ export default {
     plugins: {
       mdEnhance: {
         katex: true, // mathjax: true,
-        sup: true, // 启用上角标功能
-        sub: true, // 启用下角标功能
-        tasklist: true, // 任务列表
-        figure: true, // 启用 figure
-        imgLazyload: true, // 图片懒加载
-        imgMark: true, // 启用图片标记
-        imgSize: true,// 启用图片大小
-        // footnote: true, 脚注
+        sup: true,
+        sub: true,
+        tasklist: true,
+        figure: true,
+        imgLazyload: true,
+        imgMark: true,
+        imgSize: true,
+        footnote: true,
+        // footnote: true,
         // include: true,  支持导入文件
         // tabs: true, 支持选项卡
-        alert: true, // GFM警告
-        spoiler: true, // 添加剧透文字
-        attrs: true, // 添加属性
-        mark: true, // 标记
+        alert: true,
+        spoiler: true,
+        attrs: true,
+        mark: true,
       },
       blog: {
         excerptLength: 0,
