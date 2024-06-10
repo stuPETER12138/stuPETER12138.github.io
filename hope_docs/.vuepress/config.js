@@ -11,7 +11,7 @@ export default {
   title: "魔法窝瓜",
   // description: "!",
   plugins: [
-    mdEnhancePlugun({
+    mdEnhancePlugin({
       katex: true, // mathjax: true,
       sup: true, // 启用上角标功能
       sub: true, // 启用下角标功能
