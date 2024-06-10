@@ -10,26 +10,28 @@ export default {
   lang: "zh-CN",
   title: "魔法窝瓜",
   // description: "!",
+  plugins: [
+    mdEnhancePlugun({
+      katex: true, // mathjax: true,
+      sup: true, // 启用上角标功能
+      sub: true, // 启用下角标功能
+      tasklist: true, // 任务列表
+      figure: true, // 启用 figure
+      imgLazyload: true, // 图片懒加载
+      imgMark: true, // 启用图片标记
+      imgSize: true,// 启用图片大小
+      footnote: true, // 脚注
+      include: true, // 支持导入文件
+      tabs: true, // 支持选项卡
+      alert: true, // GFM警告
+      spoilor: true, // 添加剧透文字
+      attrs: true, // 添加属性
+      hint: true, // 默认的，提示容器
+      mark: true, // 标记
+    }),
+  ],
   theme: hopeTheme({ 
     plugins: {
-      mdEnhance: {
-        katex: true, // 或者 mathjax: true,
-        sup: true, // 启用上角标功能
-        sub: true, // 启用下角标功能
-        tasklist: true, // 任务列表
-        figure: true, // 启用 figure
-        imgLazyload: true, // 图片懒加载
-        imgMark: true, // 启用图片标记
-        imgSize: true,// 启用图片大小
-        footnote: true, // 脚注
-        include: true, // 支持导入文件
-        tabs: true, // 支持选项卡
-        alert: true, // GFM警告
-        spoilor: true, // 添加剧透文字
-        attrs: true, // 添加属性
-        hint: true, // 默认的，提示容器
-        mark: true, // 标记
-      },
       blog: {
         excerptLength: 0,
       },
