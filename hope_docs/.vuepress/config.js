@@ -43,11 +43,11 @@ export default {
     navbar: [
       {
         text: '首页',
-        link: '/',
+        link: '/'
       },
       {
         text: '学习记录',
-        link: '/studying/smd'，
+        link: '/studying/smd'
       },
     ],
     sidebar: 'structure',
