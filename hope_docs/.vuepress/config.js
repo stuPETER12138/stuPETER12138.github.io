@@ -14,7 +14,6 @@ export default {
     plugins: {
       mdEnhance: {
         katex: true, 
-        // mathjax也可以
         sup: true,
         sub: true,
         tasklist: true,
@@ -23,12 +22,12 @@ export default {
         imgMark: true,
         imgSize: true,
         footnote: true,
-        include: true,
+        // include: true,
         tabs: true,
         alert: true,
         spoiler: true,
         attrs: true,
-        mark: true,
+        // mark: true,
       },
       blog: {
         excerptLength: 0,
