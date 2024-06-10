@@ -2,6 +2,7 @@ import { viteBundler } from '@vuepress/bundler-vite';
 import { hopeTheme } from "vuepress-theme-hope";
 import { mdEnhancePlugin } from 'vuepress-plugin-md-enhance';
 import { getDirname, path } from "vuepress/utils";
+import { copyrightPlugin } from '@vuepress/plugin-copyright';
 
 const __dirname = getDirname(import.meta.url);
 
@@ -29,6 +30,7 @@ export default {
         attrs: true,
         mark: true,
       },
+      copyright: 'MIT 协议 | 版权所有 © 2024 魔法窝瓜',
       blog: {
         excerptLength: 0,
       },
