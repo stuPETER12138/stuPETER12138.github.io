@@ -54,7 +54,7 @@ export default {
       name: "👋你好，我是魔法窝瓜",
       description: "一个淡淡的大学生",
       medias: {
-        GitHub: "https://github.com/stuPETER12138"
+        GitHub: "https://github.com/stuPETER12138",
       },
     },
   }),
