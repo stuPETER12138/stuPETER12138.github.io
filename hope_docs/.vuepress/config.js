@@ -9,11 +9,14 @@ export default {
   bundler: viteBundler(), // 确定打包工具
   lang: "zh-CN",
   title: "魔法窝瓜",
-  // description: ""
   theme: hopeTheme({ 
     plugins: {
       mdEnhance: {
-        katex: true, // mathjax: true,
+        align: true,
+        footnote: true,
+        tabs: true,
+        include: true,
+        mathjax: true,
         sup: true,
         sub: true,
         tasklist: true,
@@ -30,7 +33,6 @@ export default {
         excerptLength: 0,
       },
     },
-    pure: false,
     darkmode: 'toggle',
     logo: '/images/magicsquash.jpg',
     repo: 'stuPETER12138/stuPETER12138.github.io',
@@ -38,12 +40,16 @@ export default {
     repoDisplay: true,
     navbar: [
       {
-        text: '首页',
-        link: '/'
+        text: '我学',
+        link: '/studying/smd'
       },
       {
-        text: '学习记录',
-        link: '/studying/smd'
+        text: '我思',
+        link: '/thinking/'
+      },
+      {
+        text: '我做',
+        link: '/moving/'
       },
     ],
     sidebar: 'structure',
