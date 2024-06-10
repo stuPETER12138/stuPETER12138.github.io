@@ -21,10 +21,8 @@ export default {
         imgLazyload: true,
         imgMark: true,
         imgSize: true,
-        footnote: true,
-        // footnote: true,
         // include: true,  支持导入文件
-        // tabs: true, 支持选项卡
+        tabs: true,
         alert: true,
         spoiler: true,
         attrs: true,
