@@ -21,9 +21,9 @@ export default {
         imgLazyload: true, // 图片懒加载
         imgMark: true, // 启用图片标记
         imgSize: true,// 启用图片大小
-        // footnote: true, // 脚注
-        include: true, // 支持导入文件
-        tabs: true, // 支持选项卡
+        // footnote: true, 脚注
+        // include: true, // 支持导入文件
+        // tabs: true, // 支持选项卡
         alert: true, // GFM警告
         spoiler: true, // 添加剧透文字
         attrs: true, // 添加属性
