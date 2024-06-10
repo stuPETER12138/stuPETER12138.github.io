@@ -1,4 +1,4 @@
-我的markdown学习
+markdown语法指北
 =
 
 markdown语法汇总
@@ -71,6 +71,8 @@ _斜体方式二_
     四个空格
     就是一个代码块
 
+<!--
+
 `这也是一个代码块`
 
 2）围栏使代码块及`tab`的用法
@@ -103,6 +105,8 @@ import numpy
 </tab>
 </tabs>
 
+-->
+
 ## 分割线
 
 好像用不了（悲
@@ -115,9 +119,9 @@ import numpy
 
 
 2）连接到markdown页面标题
-
+<!--
 [Markdown  Default-topic](Default-topic.md "点击跳转")
-
+-->
 3）同其他元素配合
 
 例如：
@@ -126,7 +130,7 @@ import numpy
 
 ## 添加图骗
 
-![这是一张图骗](/images/magicsquash.jpg "想逗女生开心的我be like")
+![这是一张图骗](/images/magicsquash.jpg "魔法窝瓜")
 
 ## Emoji表情
 
@@ -141,11 +145,9 @@ import numpy
 
 ## 脚注
 
-1）定义脚注
+这是一个脚注[^1]
 
-[^注]: 这是一个脚注。
-
-2）引用脚注
+[^1]: 脚注 **可以包含特殊标记**
 
 ## 公式
 

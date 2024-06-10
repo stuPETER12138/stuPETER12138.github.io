@@ -12,10 +12,10 @@ export default {
   theme: hopeTheme({ 
     plugins: {
       mdEnhance: {
-        align: true,
+        include: true,
         footnote: true,
         tabs: true,
-        include: true,
+        align: true,
         mathjax: true,
         sup: true,
         sub: true,
@@ -41,7 +41,7 @@ export default {
     navbar: [
       {
         text: '我学',
-        link: '/studying/smd'
+        link: '/studying/learningmd'
       },
       {
         text: '我思',
