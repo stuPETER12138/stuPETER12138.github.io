@@ -37,6 +37,13 @@ export default {
       blog: {
         excerptLength: 0,
       },
+      components: {
+        components: [
+          'PDF',
+          'Share',
+          
+        ],
+      },
     },
     darkmode: 'toggle',
     logo: '/images/magicsquash.jpg',
@@ -62,32 +69,32 @@ export default {
       },
       {
         text: '我思',
-        link: '/thinking/'
+        link: '/thinking/',
       },
       {
         text: '我做',
-        link: '/moving/'
+        link: '/moving/',
       },
     ],
     sidebar: [
       {
         text: '带我回家',
-        link: '/'
+        link: '/',
       },
       {
         text: '我学',
-        link: '/studying/'
+        prefix: '/studying/',
+        children: 'structure',
       },
       {
         text: '我思',
-        link: '/thinking/'
+        link: '/thinking/',
       },
       {
         text: '我做',
-        link: '/moving/'
+        link: '/moving/',
       },
     ],
-    // 博客相关
     blog: {
       avatar: "/images/transparent_me.png",
       name: "👋你好，我是魔法窝瓜",
