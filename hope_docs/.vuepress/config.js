@@ -41,7 +41,7 @@ export default {
         components: [
           'PDF',
           'Share',
-          
+
         ],
       },
     },
@@ -64,6 +64,10 @@ export default {
           {
             text: '论文精读',
             link: 'papereading/',
+          },
+          {
+            text: '广告位招租',
+            link: 'weirdthing',
           },
         ],
       },
