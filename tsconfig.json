@@ -5,7 +5,7 @@
     "target": "ES2022"
   },
   "include": [
-    "hope_docs/.vuepress/**/*.ts",
+    "hope_docs/.vuepress/**/*.js",
     "hope_docs/.vuepress/**/*.vue"
 , "references/sidebar.ts"  ],
   "exclude": [

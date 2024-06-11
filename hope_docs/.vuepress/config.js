@@ -60,6 +60,8 @@ export default {
       avatar: "/images/transparent_me.png",
       name: "👋你好，我是魔法窝瓜",
       description: "一个淡淡的大学生",
+      sidebarDisplay: 'none',
+      articlePerPage: '6',
       medias: {
         GitHub: "https://github.com/stuPETER12138",
       },

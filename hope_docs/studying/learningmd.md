@@ -1,3 +1,8 @@
+---
+star: 1
+sticky: true
+---
+
 markdown语法指北
 =
 
