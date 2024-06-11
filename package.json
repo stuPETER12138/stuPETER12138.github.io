@@ -17,6 +17,7 @@
     "@vuepress/plugin-blog": "^1.9.4",
     "@vuepress/plugin-comment": "2.0.0-rc.34",
     "@vuepress/plugin-copyright": "2.0.0-rc.34",
+    "@vuepress/plugin-git": "2.0.0-rc.34",
     "@vuepress/theme-default": "2.0.0-rc.28",
     "@waline/client": "^3.2.1",
     "katex": "^0.16.10",

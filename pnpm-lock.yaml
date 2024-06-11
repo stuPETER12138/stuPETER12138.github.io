@@ -20,6 +20,9 @@ importers:
       '@vuepress/plugin-copyright':
         specifier: 2.0.0-rc.34
         version: 2.0.0-rc.34(vuepress@2.0.0-rc.12(@vuepress/bundler-vite@2.0.0-rc.12(@types/node@20.14.2)(sass@1.77.4))(vue@3.4.27))
+      '@vuepress/plugin-git':
+        specifier: 2.0.0-rc.34
+        version: 2.0.0-rc.34(vuepress@2.0.0-rc.12(@vuepress/bundler-vite@2.0.0-rc.12(@types/node@20.14.2)(sass@1.77.4))(vue@3.4.27))
       '@vuepress/theme-default':
         specifier: 2.0.0-rc.28
         version: 2.0.0-rc.28(vuepress@2.0.0-rc.12(@vuepress/bundler-vite@2.0.0-rc.12(@types/node@20.14.2)(sass@1.77.4))(vue@3.4.27))
