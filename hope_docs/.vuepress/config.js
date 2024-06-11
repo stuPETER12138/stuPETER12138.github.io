@@ -67,7 +67,7 @@ export default {
           },
           {
             text: '广告位招租',
-            link: 'weirdthing',
+            link: 'weirdthing/',
           },
         ],
       },
