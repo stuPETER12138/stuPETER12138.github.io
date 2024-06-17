@@ -62,8 +62,8 @@ export default {
             link: 'markdown/',
           },
           {
-            text: '论文精读',
-            link: 'papereading/',
+            text: '我的大学',
+            link: 'college/',
           },
           {
             text: '广告位招租',
@@ -73,7 +73,13 @@ export default {
       },
       {
         text: '我思',
-        link: '/thinking/',
+        prefix: '/thinking/',
+        children: [
+          {
+            text: '论文精读',
+            link: 'papereading/',
+          },
+        ],
       },
       {
         text: '我做',
@@ -92,7 +98,8 @@ export default {
       },
       {
         text: '我思',
-        link: '/thinking/',
+        prefix: '/thinking/',
+        children: 'structure',
       },
       {
         text: '我做',
