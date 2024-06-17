@@ -1,7 +1,7 @@
 ---
 date: 2024-06-11
-title: 实验
+title: 广告位招租
 article: false
 ---
 
-<PDF url="//file.mo7.cc/disk/bqaey.pdf" viewer: true />
+![Theresa](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/Theresa.png)
