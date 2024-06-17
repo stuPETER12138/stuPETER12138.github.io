@@ -158,15 +158,11 @@ $$
 		$\int_0^{\infty} f(x) \mathop{}\!\mathrm{d} x$ and $\displaystyle \int_0^{\infty} f(x) \mathop{}\!\mathrm{d} x$
 
 	- 行间：
-		$$
-		\int \frac{\mathop{}\!\mathrm{d} x}{x} = \ln(x) + C
-		$$
+		$$\int \frac{\mathop{}\!\mathrm{d} x}{x} = \ln(x) + C$$
 
 		和
 
-	    $$
-	    \textstyle \int \frac{\mathop{}\!\mathrm{d} x}{x} = \ln(x) + C
-	    $$
+	    $$\textstyle \int \frac{\mathop{}\!\mathrm{d} x}{x} = \ln(x) + C$$
 
 
 ### 箭头
