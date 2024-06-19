@@ -107,7 +107,7 @@ export default {
       },
     ],
     blog: {
-      avatar: "/images/transparent_me.png",
+      avatar: "/images/sqush_reading.png",
       name: "👋你好，我是魔法窝瓜",
       description: "一个淡淡的大学生",
       sidebarDisplay: 'none',
