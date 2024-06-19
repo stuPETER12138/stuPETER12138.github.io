@@ -109,7 +109,7 @@ export default {
     blog: {
       avatar: "/images/sqush_reading.png",
       name: "👋你好，我是魔法窝瓜",
-      description: "一个淡淡的大学生",
+      description: "一名淡淡的大学生",
       sidebarDisplay: 'none',
       articlePerPage: '6',
       timeline: '昨天也是努力的一天啊',
