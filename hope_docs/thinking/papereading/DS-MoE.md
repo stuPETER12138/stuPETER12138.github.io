@@ -1,6 +1,6 @@
 ---
 date: 2024-06-29
-titlle: DeepSpeed-MoE 阅读笔记
+title: DeepSpeed-MoE 阅读笔记
 star: 1
 category: 
     - 我思
