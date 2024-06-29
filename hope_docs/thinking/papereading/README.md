@@ -6,7 +6,7 @@ article: false
 
 ### 传送门
 
-- [用魔法打败魔法](preface.md)
+- [DeepSpeed-MoE](DS-MoE.md)
 
 ### 写在前面
 
