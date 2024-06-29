@@ -1,7 +1,7 @@
 ---
 date: 2024-06-29
+titlle: DeepSpeed-MoE 阅读笔记
 star: 1
-sticky: true
 category: 
     - 我思
 tag: 
