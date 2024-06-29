@@ -2,7 +2,7 @@
 date: 2024-06-11
 title: markdown语法指北
 star: 1
-sticky: flase
+sticky: false
 category: 
     - 我学
 tag: 
