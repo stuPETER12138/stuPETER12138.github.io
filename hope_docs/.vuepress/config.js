@@ -73,6 +73,7 @@ export default {
       },
       {
         text: '我思',
+        icon: 'note',
         prefix: '/thinking/',
         children: [
           {
@@ -89,6 +90,7 @@ export default {
     sidebar: [
       {
         text: '带我回家',
+        icon: 'home',
         link: '/',
       },
       {
