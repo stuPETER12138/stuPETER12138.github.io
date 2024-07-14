@@ -1,6 +1,6 @@
 ---
 data: 2024-07-14
-title: Task 1 学习笔记
+title: Datawhale AI 夏令营 Task 1 学习笔记
 category: 
     - 我做
 tag: 
@@ -8,7 +8,6 @@ tag:
     - AI
 ---
 
-# Task 1
 跑通baseline，体验NLP模型解决问题的流程，基本了解赛题要求，理解赛题场景
 
 ### 赛题提交流程
