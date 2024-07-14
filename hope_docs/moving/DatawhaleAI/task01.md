@@ -29,7 +29,11 @@ tag:
 
 注意到，代码 2 修改了 N 和 N_EPOCHS，训练数据变为了数据集的前 2000 个样本，训练次数增加到了 50 轮。可以发现随着训练数据和训练次数的增加，模型的效果也会变好
 
-吗？（暂时存疑
+吗？
+
+如下图所示，当训练数据增加到前 6000 个样本，训练 60 轮，发现损失值在 4.3 左右“久居不下”，似乎模型此时处于过拟合状态，再增加 epoch 也可能收效甚微。值得一提的是，这次训练得分突破了 1.0 大关，获得了 1.6165 分。:yum: 
+
+![Train Loss](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240714222541.png)
 
 ### 参考资料
 [从零入门NLP竞赛](https://datawhaler.feishu.cn/wiki/FVs2wAVN5iqHMqk5lW2ckfhAncb)
