@@ -7,7 +7,7 @@ tag:
     - latex
 ---
 
-由于笔者较懒，一些公式/表达式的详细语法请读者在 GitHub 上查阅。具体方法：点击文末`编辑此页`选项，进入 GitHub，将分支改为`gh-pages`即可。
+由于笔者较懒，一些公式/表达式的详细语法请读者在 [GitHub](https://github.com/stuPETER12138/stuPETER12138.github.io/blob/main/hope_docs/studying/markdown/latex.md) 上查阅。
 
 ### 引用公式
 
