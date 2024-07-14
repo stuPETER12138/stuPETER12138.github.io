@@ -6,6 +6,7 @@ category:
     - 我思
 tag: 
     - MoE
+    - AI
 ---
 
 # DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale

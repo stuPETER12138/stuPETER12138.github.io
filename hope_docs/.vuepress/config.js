@@ -86,7 +86,13 @@ export default {
       {
         text: '我做',
         icon: '/icons/line-md--clipboard-list.svg',
-        link: '/moving/',
+        prefix: '/moving/',
+        children: [
+          {
+            text: 'Datawhale AI 夏令营',
+            link: 'DatawhaleAI/',
+          }
+        ],
       },
     ],
     sidebar: [
@@ -107,7 +113,8 @@ export default {
       },
       {
         text: '我做',
-        link: '/moving/',
+        prefix: '/moving/',
+        children: 'structure',
       },
     ],
     blog: {
