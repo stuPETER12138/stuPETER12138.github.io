@@ -7,13 +7,7 @@ tag:
     - latex
 ---
 
-> 参考资料：
-> 
-> [MarkDown数学公式语法整理](https://blog.csdn.net/guoxulieying/article/details/131107653)
-> 
-> [markdown公式大全](https://blog.csdn.net/jzj_c_love/article/details/122279703)
-> 
-> [LaTeX 格式手册 | 洛谷帮助中心 (luogu.com.cn)](https://help.luogu.com.cn/rules/academic/handbook/latex)
+由于笔者较懒，一些公式/表达式的详细语法请读者在 GitHub 上查阅。具体方法：点击文末`编辑此页`选项，进入 GitHub，将分支改为`gh-pages`即可。
 
 ### 引用公式
 
