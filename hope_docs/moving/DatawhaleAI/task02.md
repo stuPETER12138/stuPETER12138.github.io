@@ -101,14 +101,14 @@ def collate_fn(batch):
 ### 关于模型训练
 **编码器-解码器框架**在神经机器翻译中有着重要地位。它可以将源语言编码为类似信息传输中的数字信号，然后利用解码器对其进行转换，生成目标语言。
 
-![一个运用编码器解码器结构的例子](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240715200956.png)
+![一个运用编码器解码器结构的例子](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175019.png)
 
 - **编码器**？在当今主流的神经机器翻译系统中，编码器由词嵌入层和中间网络层组成。当输入一串单词序列时，词嵌入层（embedding）会将每个单词映射到多维实数表示空间，这个过程也被称为词嵌入。之后中间层会对词嵌入向量进行更深层的抽象，得到输入单词序列的中间表示。
 - **解码器**？解码器的结构基本上和编码器是一致的，在基于循环神经网络的翻译模型中，解码器只比编码器多了输出层，用于输出每个目标语言位置的单词生成概率。而在基于自注意力机制的翻译模型中，除了输出层，解码器还比编码器多一个编码­解码注意力子层，用于帮助模型更好地利用源语言信息。
 
 - **注意力机制**！注意力机制的引入使得不再需要把原始文本中的所有必要信息压缩到一个向量当中。
 
-![引入注意力机制的循环神经网络机器翻译架构](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240715213100.png)
+![引入注意力机制的循环神经网络机器翻译架构](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175201.png)
 
 传统的 Seq2Seq 模型在解码阶段仅依赖于编码器产生的最后一个隐藏状态，这在处理长序列时效果不佳。注意力机制允许解码器在生成每个输出词时，关注编码器产生的所有中间状态，从而更好地利用源序列的信息。具体来说，给定源语言序列经过编码器输出的向量序列 $h_{1},h_{2},h_{3},...,h_{m}$，注意力机制旨在依据解码端翻译的需要，自适应地从这个向量序列中查找对应的信息。
 
@@ -136,7 +136,7 @@ plt.ylabel('BLEU SCORE')
 plt.show()
 ```
 
-![基于注意力机制的 GRU 神经网络机器翻译](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717133423.png)
+![基于注意力机制的 GRU 神经网络机器翻译](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175533.png)
 
 可以看出：在 GRU 与注意力机制相结合的情况下，随着句子长度增加，模型也有较可观的得分。受限于样本与循环次数，图线出现了一定波动，但平均值（红色虚线）约为 30。从 10 开始的短序列到 60 以上的长序列，图线的表现相似。可以看出 GRU 与注意力机制相的组合对训练结果确实有所提升。
 
@@ -144,7 +144,7 @@ plt.show()
 
 再结合单独使用循环神经网络和循环神经网络加注意力机制。可得`注意力机制对于模型训练有较大提升`。
 
-![单独使用循环神经网络和循环神经网络加注意力机制](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717084057.png)
+![单独使用循环神经网络和循环神经网络加注意力机制](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175224.png)
 
 #### 那么，何为 GRU?
 
@@ -154,7 +154,7 @@ plt.show()
 ##### 二、重置门与更新们
 重置门允许我们控制“可能还想记住”的过去状态的数量； 更新门将允许我们控制新状态中有多少个是旧状态的副本。 两个门的输入是由`当前时间步的输入`和`前一时间步的隐状`态给出。 两个门的输出是由使用 sigmoid 激活函数的`两个全连接层`给出。
 
-![在门控循环单元模型中计算重置门和更新门](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240716221530.png)
+![在门控循环单元模型中计算重置门和更新门](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175552.png)
 
 对于确定的时间步 $t$，此时输入（样本个数为 $n$，输入个数为 $d$）为 $X_t$，上一时间步的隐状态（隐藏单元个数为 $h$）是 $H_{t-1}$，则有：
 
@@ -169,7 +169,7 @@ $$\textstyle \tilde{H_t} = tanh(w_{xh}X_t + (R_t \odot H_{t-1})W_{hh} + b_h)$$
 
 将 $R_t$ 和 $H_{t-1}$ 按元素相乘可以减少以往状态的影响。每当重置门 $R_t$ 中的项接近 1 时，我们可恢复一个普通的循环神经网络[^2]。对于重置门 $R_t$ 中所有接近 0 的项，候选隐状态是以 $X_t$ 作为输入的多层感知机的结果。因此,任何预先存在的隐状态都会被重置为默认值。
 
-![在门控循环单元模型中计算候选隐状态](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240716223705.png)
+![在门控循环单元模型中计算候选隐状态](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175609.png)
 
 ##### 四、隐状态
 再结合 $Z_t$ 就得出了门控循环单元的最终更新公式：
@@ -178,7 +178,7 @@ $$\textstyle H_t = Z_t \odot H_{t-1} + (1 - Z_t) \odot \tilde{H_t}$$
 
 每当更新门 $Z_t$ 接近 1 时，模型就倾向只保留旧状态。此时，来自 $X_t$ 的信息基本被忽略，从而有效地跳过了依赖链条中的时间步 $t$。相反，当 $Z_t$ 接近 0 时，新的隐状态 $H_t$ 就会接近候选隐状态 $\tilde{H_t}$。这些可以帮助我们处理循环神经网络中的梯度消失问题，并更好地捕获时间步距离很长的序列的依赖关系。
 
-![计算门控循环单元模型中的隐状态](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240716224442.png)
+![计算门控循环单元模型中的隐状](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175631.png)
 
 总而言之，言而总之，门控循环单元，让模型具有了**记忆力**，其具有两大特征：
 
@@ -194,7 +194,7 @@ $$\textstyle H_t = Z_t \odot H_{t-1} + (1 - Z_t) \odot \tilde{H_t}$$
 
 不过好处是：BLEU 属于`有参考答案的自动评价`。这种自动评价的结果获取成本低，可以多次重复，而且可以用于对系统结果的快速反馈，指导系统优化的方向。
 
-![](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240716214720.png)
+![](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717175230.png)
 
 ### 参考资料
 [Task1：了解机器翻译 & 理解赛题](https://datawhaler.feishu.cn/wiki/FVs2wAVN5iqHMqk5lW2ckfhAncb?from=from_copylink)
