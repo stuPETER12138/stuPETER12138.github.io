@@ -13,7 +13,7 @@ Task 2: baseline 代码[^1]详解入门深度学习
 ### 写在前面
 通常我们基于神经网络解决机器翻译任务的流程如下：
 
-![流程图](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717164109.png)
+![流程图](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/20240717174552.png)
 
 ### 关于环境配置
 `魔塔`平台已经提供了 Ubutu22.04 + CUDA12.1.0 + python3.10 + pytorch2.3.0 + TensorFlow2.14.0 的预装环境。不过为实现 Task 2，我们还需要额外添加一些库。

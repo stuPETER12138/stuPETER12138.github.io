@@ -4,4 +4,4 @@ title: 广告位招租
 article: false
 ---
 
-![Theresa](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/Theresa.png)
+![Theresa](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/Theresa.png)
