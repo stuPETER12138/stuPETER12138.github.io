@@ -13,7 +13,7 @@ Task 2: baseline 代码[^1]详解入门深度学习
 ### 写在前面
 通常我们基于神经网络解决机器翻译任务的流程如下：
 
-![流程图](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240715195725.png)
+![流程图](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717164109.png)
 
 ### 关于环境配置
 `魔塔`平台已经提供了 Ubutu22.04 + CUDA12.1.0 + python3.10 + pytorch2.3.0 + TensorFlow2.14.0 的预装环境。不过为实现 Task 2，我们还需要额外添加一些库。
@@ -144,7 +144,7 @@ plt.show()
 
 再结合单独使用循环神经网络和循环神经网络加注意力机制。可得`注意力机制对于模型训练有较大提升`。
 
-![20240717084057](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717084057.png)
+![单独使用循环神经网络和循环神经网络加注意力机制](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic@latest/pictrues/20240717084057.png)
 
 #### 那么，何为 GRU?
 
