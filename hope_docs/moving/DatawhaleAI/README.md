@@ -9,6 +9,3 @@ article: false
 - [Task 2](./task02.md)
 
 ![](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic/pictures/Screenshot_20240716_184306_com.banshenghuo.mobile.jpg)
-
-
-https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic
