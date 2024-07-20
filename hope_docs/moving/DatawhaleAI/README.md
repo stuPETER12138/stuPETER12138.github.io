@@ -7,5 +7,6 @@ article: false
 ### 第二期
 - [Task 1](./task01.md)
 - [Task 2](./task02.md)
+- [Task 3](./task03.md)
 
-![](https://cdn.jsdelivr.net/gh/stuPETER12138/picgopic/pictures/Screenshot_20240716_184306_com.banshenghuo.mobile.jpg)
+![](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/202407201733716.jpg)
