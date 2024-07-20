@@ -1,6 +1,7 @@
 ---
 date: 2024-07-14
 title: Datawhale AI 夏令营 Task 1 学习笔记
+article: false
 category: 
     - 我做
 tag: 
