@@ -170,7 +170,7 @@ print(len(train_data))
 #数据清理后变为 148329，去重后为 92000
 ```
 
-为了更好的数据，我又写了一点小代码，将英文语句的常见缩写展开：
+为了更好的数据，我又写了一点小代码，将英文语句的常见缩写展开，例如将`I'm`变为`I am`：
 
 <details>
 <summary><font size="4" color="orange">代码过长，请点击展开</font></summary> 
@@ -300,6 +300,11 @@ with open(file_path1, "w", encoding="utf-8") as f:
 </details>
 
 至此，数据清洗完成，代码可正常运行了。
+
+### 未来展望
+1. 训练集中存在部分语句引号不完整的情况，我希望能想到一个好的数据改进的办法；
+
+2. 用术语词典替换翻译结果可能效果有限，最好可以在模型中额外增加一层将术语融合进词嵌入层，仍需学习相关知识
 
 ### 参考资料
 [Task3：基于Transformer解决机器翻译任务](https://datawhaler.feishu.cn/wiki/OgQWwkYkviPfpwkE1ZmcXwcWnAh?from=from_copylink)
