@@ -146,7 +146,7 @@ train_en, train_zh = zip(*(line.split('\t') for line in train_data))
 
 ![](https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/202407192355410.png)
 
-于是我修改了*数据加载函数*下的`读取训练数据`部分：
+于是我修改了*数据加载函数*下的`读取训练数据`部分，同时添加了去重功能：
 
 ```python
 # 读取训练数据
@@ -157,17 +157,147 @@ train_data = read_data(train_path)
         else:
             # 删掉没有 \t 的元素
             train_data.remove(line)
+    # 去掉重复元素
+    train_data = np.unique(train_data).tolist()
     train_en, train_zh = zip(*(line.split('\t') for line in train_data))
 ```
 
 顺便获取了修改后的训练集最大长度:
 
 ```python
-MAX_LENGTH = 100
-train_processed = preprocess_data(train_en, train_zh)
-print(f"长度为：{len(train_processed)}")
-# 长度为：148329
+print(len(train_data))
+# # 采样训练集的数量，刚开始最多 148363 
+#数据清理后变为 148329，去重后为 92000
 ```
+
+为了更好的数据，我又写了一点小代码，将英文语句的常见缩写展开：
+
+<details>
+<summary><font size="4" color="orange">代码过长，请点击展开</font></summary> 
+<pre>
+<code class="language-python">
+contractions = {
+    "I'm": "I am",
+    "he's": "he is",
+    "she'll": "she will",
+    "he'll": "he will",
+    "you'll": "you will",
+    "you're": "you are",
+    "you've": "you have",
+    "you'd": "you would",
+    "we've": "we have",
+    "we'd": "we would",
+    "they've": "they have",
+    "she's": "she is",
+    "that's": "that is",
+    "what's": "what is",
+    "where's": "where is",
+    "how's": "how is",
+    "it's": "it is",
+    "It's": "It is",
+    "who's": "who is",
+    "we're": "we are",
+    "they're": "they are",
+    "would've": "would have",
+    "not've": "not have",
+    "I've": "I have",
+    "that'll": "that will",
+    "I'll": "I will",
+    "isn't": "is not",
+    "wasn't": "was not",
+    "aren't": "are not",
+    "weren't": "were not",
+    "can't": "can not",
+    "couldn't": "could not",
+    "don't": "do not",
+    "didn't": "did not",
+    "shouldn't": "should not",
+    "wouldn't": "would not",
+    "doesn't": "does not",
+    "haven't": "have not",
+    "hasn't": "has not",
+    "hadn't": "had not",
+    "won't": "will not",
+    "ain't": "am not",
+    "there's": "there is",
+    "there'll": "there will",
+    "there'd": "there would",
+    "there're": "there are",
+    "here's": "here is",
+    "here'll": "here will",
+    "here'd": "here would",
+    "here're": "here are",
+    "they'll": "they will",
+    "they'd": "they would",
+    "I'd": "I would",
+    "that'd": "that would",
+    "that're": "that are",
+    "that've": "that have",
+    "there've": "therehave",
+    "There've": "There have",
+    "That's": "That is",
+    "That'll": "That will",
+    "That'd": "That would",
+    "That're": "That are",
+    "That've": "That have",
+    "There's": "There is",
+    "There'll": "There will",
+    "There'd": "There would",
+    "There're": "There are",
+    "Here's": "Here is",
+    "Here'll": "Here will",
+    "mother's": "mother is",
+    "father's": "father is",
+    "sister's": "sister is",
+    "brother's": "brother is",
+    "mother'll": "mother will",
+    "father'll": "father will",
+    "sister'll": "sister will",
+    "brother'll": "brother will",
+    "mother'd": "mother would",
+    "father'd": "father would",
+    "sister'd": "sister would",
+    "He's": "He is",
+    "She's": "She is",
+    "We're": "We are",
+    "They're": "They are",
+    "You're": "You are",
+    "You've": "You have",
+    "You'd": "You would",
+    "We've": "We have",
+    "We'd": "We would",
+    "They've": "They have",
+    "Don't": "Do not",
+    "Didn't": "Did not",
+    "Can't": "Can not",
+    "Couldn't": "Could not",
+    "Shouldn't": "Should not",
+    "Wouldn't": "Would not",
+    "Ain't": "Am not",
+    "Isn't": "Is not",
+    "Wasn't": "Was not",
+    "Weren't": "Were not",
+    "Haven't": "Have not",
+}
+def expand_contractions(text):
+    for contraction, replacement in contractions.items():
+        text = text.replace(contraction, replacement)
+    return text
+file_path = './dataset/train.txt'
+with open(file_path, "r", encoding="utf-8") as f:
+    text = f.read()
+    text_new = expand_contractions(text)
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(text_new)
+file_path1 = './dataset/dev_en.txt'
+with open(file_path1, "r", encoding="utf-8") as f:
+    text = f.read()
+    text_new = expand_contractions(text)
+with open(file_path1, "w", encoding="utf-8") as f:
+    f.write(text_new)
+</code>
+</pre>
+</details>
 
 至此，数据清洗完成，代码可正常运行了。
 
