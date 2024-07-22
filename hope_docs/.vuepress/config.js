@@ -54,7 +54,7 @@ export default {
     navbar: [
       {
         text: '我学',
-        icon: '/icons/line-md--check-list-3-twotone.svg',
+        icon: '/icons/line-md--coffee-loop.svg',
         prefix: '/studying/',
         children: [
           {
@@ -73,7 +73,7 @@ export default {
       },
       {
         text: '我思',
-        icon: '/icons/line-md--pencil.svg',
+        icon: '/icons/line-md--speedometer-loop.svg',
         prefix: '/thinking/',
         children: [
           {
@@ -84,7 +84,7 @@ export default {
       },
       {
         text: '我做',
-        icon: '/icons/line-md--clipboard-list.svg',
+        icon: '/icons/line-md--cog-loop.svg',
         prefix: '/moving/',
         children: [
           {
