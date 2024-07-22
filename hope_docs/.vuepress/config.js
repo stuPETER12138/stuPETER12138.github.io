@@ -117,10 +117,9 @@ export default {
       },
     ],
     blog: {
-      avatar: "/images/sqush_reading.png",
+      avatar: "/images/but_inverted.jpg",
       name: "👋你好，我是魔法窝瓜",
-      bgimage: "https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/202407222101180.png",
-      description: "一名淡淡的大学生",
+      description: "一只淡淡的窝瓜",
       sidebarDisplay: 'none',
       articlePerPage: '6',
       timeline: '昨天也是努力的一天啊',
