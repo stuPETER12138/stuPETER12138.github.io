@@ -9,7 +9,6 @@ const __dirname = getDirname(import.meta.url);
 export default {
   bundler: viteBundler(), // 确定打包工具
   lang: 'zh-CN',
-  title: '魔法窝瓜',
   author: '魔法窝瓜',
   theme: hopeTheme({ 
     plugins: {
@@ -120,6 +119,7 @@ export default {
     blog: {
       avatar: "/images/sqush_reading.png",
       name: "👋你好，我是魔法窝瓜",
+      bgimage: "https://gitee.com/stu-peter_0/picgopic/raw/main/pictures/202407222101180.png",
       description: "一名淡淡的大学生",
       sidebarDisplay: 'none',
       articlePerPage: '6',
