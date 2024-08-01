@@ -66,8 +66,8 @@ export default {
             link: 'college/',
           },
           {
-            text: '广告位招租',
-            link: 'weirdthing/',
+            text: '一点点 VIM',
+            link: 'vim/',
           },
         ],
       },
