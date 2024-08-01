@@ -122,7 +122,7 @@ export default {
       description: "一只淡淡的窝瓜",
       sidebarDisplay: 'none',
       articlePerPage: '6',
-      timeline: '昨天也是努力的一天啊',
+      timeline: '昨天也是努力的一天呢',
       medias: {
         GitHub: "https://github.com/stuPETER12138",
       },
