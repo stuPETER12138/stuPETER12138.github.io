@@ -1,6 +1,6 @@
 ---
 date: 2024-07-15
-title: Datawhale AI 夏令营 Task 2 学习笔记
+title: Datawhale AI 夏令营（第二期） Task 2 学习笔记
 article: false
 category: 
     - 我做
