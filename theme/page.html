@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+<article>
+    <header>
+        {% if current_page.meta.title %}
+        <h1 class="title">{{ current_page.meta.title }}</h1>
+        {% endif %} {% if current_page.meta.date %}
+        <time class="meta">{{ current_page.meta.date }}</time>
+        {% endif %}
+    </header>
+    <div class="content">{{ content | safe }}</div>
+</article>
+{% endblock %}
