@@ -19,15 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
       - run: cargo install mdbear
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
+
       - name: Build with mdBear
         run: mdbear build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
