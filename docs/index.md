@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "魔法窝瓜"
-  text: "个人知识库" 
+  text: "维基知识库" 
   tagline: 任何足够先进的科技，皆与魔法无异
   actions:
     - theme: brand
@@ -16,7 +16,7 @@ hero:
 features:
   - title: 关于知识库
     icon: 🫡
-    details: 持续更新!不会烂尾！我感兴趣的方向包括但不限于：数学，哲学，机器学习，计算机技能
+    details: 持续更新!不会烂尾！我感兴趣的方向包括但不限于：数学，哲学，时政，机器人学，计算机技能等
   - title: 来学强化学习吧！
     icon: 🐟
     details: 跟着“鱼书”学强化学习，这是我的学习笔记

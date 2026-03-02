@@ -1,4 +1,4 @@
-# Blog files
+# Site files
 node_modules/
 docs/.vitepress/dist
 docs/.vitepress/cache
