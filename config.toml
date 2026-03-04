@@ -1,7 +1,8 @@
 site_icon = ":-)"
-site_name = "mdBear"
+site_name = "Magic Squash"
 author = "Magic Squash"
 output_dir = "mdbear"
+blog_url = "https://stupeter12138.github.io/blog"
 
 [[nav]]
 name = "Home"
