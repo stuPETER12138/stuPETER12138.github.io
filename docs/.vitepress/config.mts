@@ -1,5 +1,13 @@
 import footnote from "markdown-it-footnote";
 import { defineConfig } from "vitepress";
+import { RSSOptions, RssPlugin } from "vitepress-plugin-rss";
+
+const baseUrl = 'https://stupeter12138.github.io/wiki/'
+const RSS: RSSOptions = {
+  title: '魔法窝瓜',
+  baseUrl,
+  copyright: 'Copyright (c) 2024-present, magic squash',
+}
 
 export default defineConfig({
   title: "魔法窝瓜",
@@ -192,4 +200,9 @@ export default defineConfig({
       { icon: "bilibili", link: "https://space.bilibili.com/671429743" },
     ],
   },
+
+  
+  vite: {
+    plugins: [RssPlugin(RSS)]
+  }
 });
