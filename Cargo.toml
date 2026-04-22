@@ -1,0 +1,11 @@
+[package]
+name = "stu_peter_12138_github_io"
+dependencies = "build my typst site by RUST."
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "stuPETER12138.github.io"
+path = "src/main.rs"
+
+[dependencies]
