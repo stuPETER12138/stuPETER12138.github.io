@@ -9,16 +9,16 @@
   // 例如，如果你想添加一个 Entry 页，你需要添加 `"/Entry/": "Entry"`
   // 然后在 `content/` 路径中新建 `Entry/`路径，在其中添加 `index.typ` 作为 Entry 页的内容
   header-links: (
-    "/": "Home",
-    "/Docs/": "Docs",
-    "/Blog/": "Blog",
-    "/CV/": "CV",
+    "/": "主页",
+    "/Blog/": "博客",
+    "/Notes/": "随笔",
+    "/About/": "关于",
   ),
 
   /// 网站的站点标题。会显示在浏览器标签页以及 SEO/社交分享卡片中。
   website-title: "魔法窝瓜",
   /// 网站作者。用于生成 <meta name="author"> 标签。（可选）
-  author: "@Magic-Squash",
+  author: "@MagicSquash",
   /// 网站描述。用于 SEO 搜索引擎摘要和社交媒体分享预览。（可选）
   description: "窝的网站",
   /// 站点的根 URL (例如 "https://example.com")。用于生成 Canonical URL 元数据。（可选）
@@ -35,7 +35,7 @@
   ),
   /// 自定义页脚元素列表 (content 数组)，显示在页面底部。
   footer-elements: (
-    "© 2026 Magic-Squash",
+    "© 2026 Magic Squash",
     [由 #link("https://github.com/Yousa-Mirage/Tufted-Blog-Template")[Tufted-Blog-Template] 强力驱动],
   ),
 )
