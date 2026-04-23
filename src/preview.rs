@@ -1,12 +1,4 @@
-//! 本地预览服务器（纯 Rust 实现，无外部依赖）
-//!
-//! 功能：
-//! - 静态文件服务（从 _site/ 目录）
-//! - 自动 Content-Type 推断
-//! - 目录请求自动回退到 index.html
-//! - ETag / If-None-Match 304 缓存
-//! - 简单目录列表（无 index.html 时）
-//! - 可选自动打开浏览器
+//! 本地预览服务器（SSE LiveReload，纯标准库）
 
 use std::collections::HashMap;
 use std::fmt::Write as FmtWrite;
@@ -15,17 +7,43 @@ use std::io::{BufRead, BufReader, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 
 use anyhow::Result;
 
-use crate::config::site_dir;
+use crate::builder;
+use crate::config::{assets_dir, config_file, content_dir, site_dir};
 
-// ── 公共入口 ──────────────────────────────────────────────────────────────────
+// ── SSE 广播器 ────────────────────────────────────────────────────────────────
+
+/// 每个 SSE 客户端对应一个 Sender<()>。
+/// 广播时逐一发送，send 失败说明客户端已断开，自动移除。
+type Clients = Arc<Mutex<Vec<mpsc::Sender<()>>>>;
+
+fn broadcast(clients: &Clients) {
+    let mut list = clients.lock().unwrap();
+    let before = list.len();
+    list.retain(|tx| tx.send(()).is_ok());
+    let alive = list.len();
+    if alive > 0 {
+        println!(
+            "  🔄 已通知 {alive} 个浏览器标签页刷新（{} 个已断开）",
+            before - alive
+        );
+    }
+}
+
+// ── 入口 ──────────────────────────────────────────────────────────────────────
 
 pub fn preview(port: u16, open_browser: bool) -> Result<bool> {
+    // 启动前检查：若 _site/ 不存在则完整构建，否则增量构建
+    println!("🔍 检查是否需要重新构建...");
+    if !builder::build(false)? {
+        println!("  ⚠ 构建失败，预览可能显示旧内容。");
+    }
+
     let site = site_dir();
     if !site.exists() {
         println!(
@@ -35,20 +53,24 @@ pub fn preview(port: u16, open_browser: bool) -> Result<bool> {
         return Ok(false);
     }
 
-    let addr = format!("0.0.0.0:{port}");
-    let listener =
-        TcpListener::bind(&addr).map_err(|e| anyhow::anyhow!("无法绑定端口 {port}: {e}"))?;
+    let listener = TcpListener::bind(format!("0.0.0.0:{port}"))
+        .map_err(|e| anyhow::anyhow!("无法绑定端口 {port}: {e}"))?;
 
-    println!("🌐 预览服务器已启动");
-    println!("   地址: http://localhost:{port}");
-    println!(
-        "   根目录: {}",
-        site.canonicalize().unwrap_or(site.clone()).display()
-    );
-    println!("   按 Ctrl+C 停止");
-    println!();
+    let root = Arc::new(site.canonicalize().unwrap_or(site));
+    let clients: Clients = Arc::new(Mutex::new(Vec::new()));
 
-    // 延迟打开浏览器
+    println!("🌐 预览服务器已启动（LiveReload 已开启）");
+    println!("   地址:   http://localhost:{port}");
+    println!("   根目录: {}", root.display());
+    println!("   按 Ctrl+C 停止\n");
+
+    // 文件监听线程
+    {
+        let c = Arc::clone(&clients);
+        thread::spawn(move || watch_and_rebuild(c));
+    }
+
+    // 打开浏览器
     if open_browser {
         let url = format!("http://localhost:{port}");
         thread::spawn(move || {
@@ -58,223 +80,347 @@ pub fn preview(port: u16, open_browser: bool) -> Result<bool> {
         });
     }
 
-    // 将 site 路径包装为 Arc，跨线程共享
-    let root = Arc::new(site.canonicalize().unwrap_or(site));
-
-    // 主接受循环
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                let root = Arc::clone(&root);
-                thread::spawn(move || {
-                    if let Err(e) = handle_connection(stream, &root) {
-                        eprintln!("  ⚠ 连接处理出错: {e}");
-                    }
-                });
+    for stream in listener.incoming().flatten() {
+        let root = Arc::clone(&root);
+        let clients = Arc::clone(&clients);
+        thread::spawn(move || {
+            if let Err(e) = handle(stream, &root, clients) {
+                let s = e.to_string();
+                if !s.contains("broken pipe") && !s.contains("connection reset") {
+                    eprintln!("  ⚠ {e}");
+                }
             }
-            Err(e) => eprintln!("  ⚠ 接受连接失败: {e}"),
-        }
+        });
     }
-
     Ok(true)
 }
 
-// ── HTTP 请求处理 ─────────────────────────────────────────────────────────────
+// ── 请求处理 ──────────────────────────────────────────────────────────────────
 
-fn handle_connection(mut stream: TcpStream, root: &Path) -> Result<()> {
-    stream.set_read_timeout(Some(Duration::from_secs(5)))?;
-
+fn handle(stream: TcpStream, root: &Path, clients: Clients) -> Result<()> {
+    stream.set_read_timeout(Some(Duration::from_secs(30)))?;
     let mut reader = BufReader::new(stream.try_clone()?);
 
-    // 读取请求行
-    let mut request_line = String::new();
-    reader.read_line(&mut request_line)?;
-    let request_line = request_line.trim();
+    // 请求行
+    let mut line = String::new();
+    reader.read_line(&mut line)?;
+    let mut parts = line.trim().splitn(3, ' ');
+    let method = parts.next().unwrap_or("GET").to_string();
+    let path = percent_decode(parts.next().unwrap_or("/").split('?').next().unwrap_or("/"));
 
-    // 解析 "METHOD /path HTTP/1.x"
-    let mut parts = request_line.splitn(3, ' ');
-    let method = parts.next().unwrap_or("GET");
-    let raw_path = parts.next().unwrap_or("/");
-
-    // 读取剩余请求头
-    let mut headers: HashMap<String, String> = HashMap::new();
+    // 消费请求头（SSE 不需要解析，HTTP 文件服务需要 If-None-Match）
+    let mut headers = HashMap::new();
     loop {
-        let mut line = String::new();
-        reader.read_line(&mut line)?;
-        let line = line.trim();
-        if line.is_empty() {
+        let mut h = String::new();
+        reader.read_line(&mut h)?;
+        if h.trim().is_empty() {
             break;
         }
-        if let Some((k, v)) = line.split_once(": ") {
+        if let Some((k, v)) = h.trim().split_once(": ") {
             headers.insert(k.to_lowercase(), v.to_string());
         }
     }
 
-    // 只处理 GET / HEAD
-    if method != "GET" && method != "HEAD" {
-        send_response(&mut stream, 405, "Method Not Allowed", &[], b"")?;
-        return Ok(());
-    }
+    let mut stream = reader.into_inner();
 
-    // URL 解码路径，去除查询字符串
-    let url_path = raw_path.split('?').next().unwrap_or("/");
-    let url_path = percent_decode(url_path);
-
-    // 安全：防止路径穿越
-    let rel = url_path.trim_start_matches('/');
-    let file_path = root.join(rel);
-    let canonical = match file_path.canonicalize() {
-        Ok(p) => p,
-        Err(_) => {
-            send_not_found(&mut stream, method == "HEAD")?;
-            log_request(method, &url_path, 404);
-            return Ok(());
-        }
-    };
-    if !canonical.starts_with(root) {
-        send_response(&mut stream, 403, "Forbidden", &[], b"")?;
-        log_request(method, &url_path, 403);
-        return Ok(());
-    }
-
-    // 目录 -> 尝试 index.html，否则生成目录列表
-    let serve_path = if canonical.is_dir() {
-        let idx = canonical.join("index.html");
-        if idx.exists() {
-            idx
-        } else {
-            let body = dir_listing(&canonical, root, &url_path);
-            let headers = [("Content-Type", "text/html; charset=utf-8")];
-            log_request(method, &url_path, 200);
-            if method == "HEAD" {
-                send_response(&mut stream, 200, "OK", &headers, b"")?;
-            } else {
-                send_response(&mut stream, 200, "OK", &headers, body.as_bytes())?;
-            }
-            return Ok(());
-        }
+    if path == "/_livereload" {
+        serve_sse(stream, clients)
     } else {
-        canonical.clone()
-    };
+        serve_file(&mut stream, root, &method, &path, &headers)
+    }
+}
 
-    if !serve_path.exists() {
-        send_not_found(&mut stream, method == "HEAD")?;
-        log_request(method, &url_path, 404);
-        return Ok(());
+// ── SSE 端点 ──────────────────────────────────────────────────────────────────
+
+fn serve_sse(mut stream: TcpStream, clients: Clients) -> Result<()> {
+    // SSE 响应头
+    stream.write_all(
+        b"HTTP/1.1 200 OK\r\n\
+          Content-Type: text/event-stream\r\n\
+          Cache-Control: no-cache\r\n\
+          Connection: keep-alive\r\n\
+          Access-Control-Allow-Origin: *\r\n\
+          \r\n",
+    )?;
+    // 首条注释心跳，让浏览器确认连接已建立
+    stream.write_all(b": connected\n\n")?;
+
+    // 注册到广播列表
+    let (tx, rx) = mpsc::channel::<()>();
+    {
+        let mut list = clients.lock().unwrap();
+        list.push(tx);
+        println!("  🔌 浏览器已连接 LiveReload（共 {} 个标签页）", list.len());
     }
 
-    // 读取文件
-    let data = fs::read(&serve_path)?;
+    // 关闭读超时，等待广播
+    stream.set_read_timeout(None)?;
 
-    // ETag = 文件大小 + 修改时间（简单哈希）
-    let etag = compute_etag(&serve_path);
-
-    // 304 缓存检查
-    if let Some(client_etag) = headers.get("if-none-match") {
-        if client_etag.trim_matches('"') == etag {
-            send_response(&mut stream, 304, "Not Modified", &[], b"")?;
-            log_request(method, &url_path, 304);
-            return Ok(());
+    // 保持连接：收到广播就推送 SSE 事件，发送失败说明客户端断开
+    for () in rx {
+        if stream.write_all(b"data: reload\n\n").is_err() {
+            break;
         }
-    }
-
-    let content_type = mime_type(&serve_path);
-    let etag_value = format!("\"{}\"", etag);
-    let resp_headers = [
-        ("Content-Type", content_type),
-        ("ETag", etag_value.as_str()),
-        ("Cache-Control", "no-cache"),
-    ];
-
-    log_request(method, &url_path, 200);
-    if method == "HEAD" {
-        send_response(&mut stream, 200, "OK", &resp_headers, b"")?;
-    } else {
-        send_response(&mut stream, 200, "OK", &resp_headers, &data)?;
     }
 
     Ok(())
 }
 
-// ── 响应发送 ──────────────────────────────────────────────────────────────────
+// ── 静态文件服务 ──────────────────────────────────────────────────────────────
 
-fn send_response(
+fn serve_file(
+    stream: &mut TcpStream,
+    root: &Path,
+    method: &str,
+    url_path: &str,
+    headers: &HashMap<String, String>,
+) -> Result<()> {
+    if method != "GET" && method != "HEAD" {
+        return respond(stream, 405, "Method Not Allowed", &[], b"");
+    }
+
+    // 路径安全检查
+    let canonical = root.join(url_path.trim_start_matches('/')).canonicalize();
+    let canonical = match canonical {
+        Ok(p) if p.starts_with(root) => p,
+        _ => {
+            log(method, url_path, 404);
+            return respond(stream, 404, "Not Found", &[], b"<h1>404</h1>");
+        }
+    };
+
+    // 目录 → index.html 或目录列表
+    let serve = if canonical.is_dir() {
+        let idx = canonical.join("index.html");
+        if idx.exists() {
+            idx
+        } else {
+            let body = inject(&dir_listing(&canonical, root, url_path));
+            log(method, url_path, 200);
+            return respond(
+                stream,
+                200,
+                "OK",
+                &[("Content-Type", "text/html; charset=utf-8")],
+                body.as_bytes(),
+            );
+        }
+    } else {
+        canonical
+    };
+
+    if !serve.exists() {
+        log(method, url_path, 404);
+        return respond(stream, 404, "Not Found", &[], b"<h1>404</h1>");
+    }
+
+    let data = fs::read(&serve)?;
+    let etag = etag(&serve);
+
+    // 304 缓存
+    if headers
+        .get("if-none-match")
+        .map(|e| e.trim_matches('"') == etag)
+        .unwrap_or(false)
+    {
+        log(method, url_path, 304);
+        return respond(stream, 304, "Not Modified", &[], b"");
+    }
+
+    let ct = mime(&serve);
+    let etag_hdr = format!("\"{etag}\"");
+    let hdrs = [
+        ("Content-Type", ct),
+        ("ETag", &etag_hdr),
+        ("Cache-Control", "no-cache"),
+    ];
+
+    // HTML 注入 LiveReload 脚本
+    let body: Vec<u8> = if ct.starts_with("text/html") {
+        inject(&String::from_utf8_lossy(&data)).into_bytes()
+    } else {
+        data
+    };
+
+    log(method, url_path, 200);
+    respond(
+        stream,
+        200,
+        "OK",
+        &hdrs,
+        if method == "HEAD" { b"" } else { &body },
+    )
+}
+
+// ── LiveReload 脚本注入 ───────────────────────────────────────────────────────
+
+fn inject(html: &str) -> String {
+    const SCRIPT: &str = "\
+<script>\
+(function(){\
+  var es=new EventSource('/_livereload');\
+  es.onmessage=function(e){if(e.data==='reload')location.reload();};\
+  es.onerror=function(){setTimeout(function(){location.reload();},1000);};\
+}());\
+</script>";
+    match html.to_lowercase().rfind("</body>") {
+        Some(i) => format!("{}{}{}", &html[..i], SCRIPT, &html[i..]),
+        None => format!("{html}{SCRIPT}"),
+    }
+}
+
+// ── 文件监听 + 自动重建 ───────────────────────────────────────────────────────
+
+fn watch_and_rebuild(clients: Clients) {
+    let mut snap = snapshot();
+    thread::sleep(Duration::from_millis(500)); // 跳过首次
+
+    loop {
+        thread::sleep(Duration::from_millis(300));
+        let cur = snapshot();
+        if cur == snap {
+            continue;
+        }
+
+        let changed: Vec<_> = cur
+            .keys()
+            .filter(|k| cur[*k] != snap.get(*k).copied().unwrap_or(0))
+            .collect();
+        println!(
+            "\n  📝 检测到 {} 个文件变动，开始增量重建...",
+            changed.len()
+        );
+        for p in &changed {
+            println!(
+                "     {}",
+                p.strip_prefix(std::env::current_dir().unwrap_or_default())
+                    .unwrap_or(p)
+                    .display()
+            );
+        }
+
+        if builder::build(false).unwrap_or(false) {
+            println!("  ✅ 重建完成");
+            broadcast(&clients);
+        } else {
+            println!("  ❌ 重建失败");
+        }
+
+        snap = snapshot();
+        println!();
+    }
+}
+
+fn snapshot() -> HashMap<PathBuf, u64> {
+    let mut m = HashMap::new();
+    for dir in [content_dir(), assets_dir()] {
+        scan(&dir, &mut m);
+    }
+    let cfg = config_file();
+    if cfg.exists() {
+        m.insert(cfg.clone(), mtime(&cfg));
+    }
+    m
+}
+
+fn scan(dir: &Path, m: &mut HashMap<PathBuf, u64>) {
+    if !dir.exists() {
+        return;
+    }
+    for e in walkdir::WalkDir::new(dir).into_iter().flatten() {
+        if e.path().is_file() {
+            m.insert(e.path().to_path_buf(), mtime(e.path()));
+        }
+    }
+}
+
+fn mtime(p: &Path) -> u64 {
+    p.metadata()
+        .and_then(|m| m.modified())
+        .ok()
+        .and_then(|t| t.duration_since(SystemTime::UNIX_EPOCH).ok())
+        .map(|d| d.as_secs())
+        .unwrap_or(0)
+}
+
+// ── 辅助函数 ──────────────────────────────────────────────────────────────────
+
+fn respond(
     stream: &mut TcpStream,
     status: u16,
     reason: &str,
     headers: &[(&str, &str)],
     body: &[u8],
 ) -> Result<()> {
-    let mut response = format!("HTTP/1.1 {status} {reason}\r\n");
-    response.push_str(&format!("Content-Length: {}\r\n", body.len()));
-    response.push_str("Connection: close\r\n");
+    let mut r = format!(
+        "HTTP/1.1 {status} {reason}\r\nContent-Length: {}\r\nConnection: close\r\n",
+        body.len()
+    );
     for (k, v) in headers {
-        response.push_str(&format!("{k}: {v}\r\n"));
+        r.push_str(&format!("{k}: {v}\r\n"));
     }
-    response.push_str("\r\n");
-    stream.write_all(response.as_bytes())?;
+    r.push_str("\r\n");
+    stream.write_all(r.as_bytes())?;
     stream.write_all(body)?;
     Ok(())
 }
 
-fn send_not_found(stream: &mut TcpStream, head_only: bool) -> Result<()> {
-    let body = b"<html><body><h1>404 Not Found</h1></body></html>";
-    let headers = [("Content-Type", "text/html; charset=utf-8")];
-    send_response(
-        stream,
-        404,
-        "Not Found",
-        &headers,
-        if head_only { b"" } else { body },
-    )
-}
-
-// ── 目录列表 ──────────────────────────────────────────────────────────────────
-
 fn dir_listing(dir: &Path, root: &Path, url_path: &str) -> String {
-    let mut entries: Vec<(String, bool)> = Vec::new();
-
-    if let Ok(read) = fs::read_dir(dir) {
-        for entry in read.flatten() {
-            let name = entry.file_name().to_string_lossy().to_string();
-            let is_dir = entry.path().is_dir();
-            entries.push((name, is_dir));
-        }
-    }
+    let mut entries: Vec<(String, bool)> = fs::read_dir(dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| {
+            (
+                e.file_name().to_string_lossy().to_string(),
+                e.path().is_dir(),
+            )
+        })
+        .collect();
     entries.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
 
-    let rel = dir.strip_prefix(root).unwrap_or(dir).to_string_lossy();
-    let title = format!("/{rel}");
-    let mut html = format!(
-        "<!DOCTYPE html><html><head><meta charset=\"utf-8\">\
-         <title>Index of {title}</title>\
-         <style>body{{font-family:monospace;padding:2em}}a{{display:block;margin:.3em 0}}</style>\
-         </head><body><h2>Index of {title}</h2><hr>"
+    let title = format!(
+        "/{}",
+        dir.strip_prefix(root).unwrap_or(dir).to_string_lossy()
     );
-
-    // 上级目录链接
+    let mut html = format!(
+        "<!DOCTYPE html><html><head><meta charset=utf-8><title>Index of {title}</title>\
+        <style>body{{font-family:monospace;padding:2em}}a{{display:block;margin:.3em 0}}</style></head>\
+        <body><h2>Index of {title}</h2><hr>"
+    );
     if url_path != "/" {
         let parent = PathBuf::from(url_path)
             .parent()
             .map(|p| p.to_string_lossy().to_string())
-            .unwrap_or_else(|| "/".to_string());
+            .unwrap_or_else(|| "/".into());
         let _ = write!(html, "<a href=\"{parent}/\">../</a>");
     }
-
     for (name, is_dir) in &entries {
-        let suffix = if *is_dir { "/" } else { "" };
-        let base = url_path.trim_end_matches('/');
-        let _ = write!(html, "<a href=\"{base}/{name}{suffix}\">{name}{suffix}</a>");
+        let suf = if *is_dir { "/" } else { "" };
+        let _ = write!(
+            html,
+            "<a href=\"{}/{name}{suf}\">{name}{suf}</a>",
+            url_path.trim_end_matches('/')
+        );
     }
-
-    html.push_str("<hr></body></html>");
-    html
+    html + "<hr></body></html>"
 }
 
-// ── 辅助函数 ──────────────────────────────────────────────────────────────────
+fn etag(path: &Path) -> String {
+    path.metadata()
+        .map(|m| {
+            let t = m
+                .modified()
+                .ok()
+                .and_then(|t| t.duration_since(SystemTime::UNIX_EPOCH).ok())
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            format!("{:x}-{t:x}", m.len())
+        })
+        .unwrap_or_else(|_| "0".into())
+}
 
-/// 根据文件扩展名返回 MIME 类型。
-fn mime_type(path: &Path) -> &'static str {
+fn mime(path: &Path) -> &'static str {
     match path.extension().and_then(|e| e.to_str()).unwrap_or("") {
         "html" | "htm" => "text/html; charset=utf-8",
         "css" => "text/css; charset=utf-8",
@@ -293,71 +439,45 @@ fn mime_type(path: &Path) -> &'static str {
         "ttf" => "font/ttf",
         "otf" => "font/otf",
         "txt" => "text/plain; charset=utf-8",
-        "md" => "text/markdown; charset=utf-8",
-        "atom" | "rss" => "application/rss+xml",
         _ => "application/octet-stream",
     }
 }
 
-/// 简单 ETag：文件大小 + 修改时间（十六进制）。
-fn compute_etag(path: &Path) -> String {
-    path.metadata()
-        .map(|m| {
-            let size = m.len();
-            let mtime = m
-                .modified()
-                .ok()
-                .and_then(|t| {
-                    t.duration_since(std::time::SystemTime::UNIX_EPOCH)
-                        .ok()
-                        .map(|d| d.as_secs())
-                })
-                .unwrap_or(0);
-            format!("{size:x}-{mtime:x}")
-        })
-        .unwrap_or_else(|_| "0".to_string())
-}
-
-/// 简单百分比解码（处理 %XX）。
 fn percent_decode(s: &str) -> String {
+    let b = s.as_bytes();
     let mut out = String::with_capacity(s.len());
-    let bytes = s.as_bytes();
     let mut i = 0;
-    while i < bytes.len() {
-        if bytes[i] == b'%' && i + 2 < bytes.len() {
-            if let Ok(hex) = std::str::from_utf8(&bytes[i + 1..i + 3]) {
-                if let Ok(byte) = u8::from_str_radix(hex, 16) {
-                    out.push(byte as char);
+    while i < b.len() {
+        if b[i] == b'%' && i + 2 < b.len() {
+            if let Ok(h) = std::str::from_utf8(&b[i + 1..i + 3]) {
+                if let Ok(c) = u8::from_str_radix(h, 16) {
+                    out.push(c as char);
                     i += 3;
                     continue;
                 }
             }
         }
-        out.push(bytes[i] as char);
+        out.push(b[i] as char);
         i += 1;
     }
     out
 }
 
-/// 打印请求日志。
-fn log_request(method: &str, path: &str, status: u16) {
-    let color = match status {
-        200..=299 => "\x1b[32m", // 绿
-        300..=399 => "\x1b[36m", // 青
-        400..=499 => "\x1b[33m", // 黄
-        _ => "\x1b[31m",         // 红
+fn log(method: &str, path: &str, status: u16) {
+    let c = match status {
+        200..=299 => "\x1b[32m",
+        300..=399 => "\x1b[36m",
+        400..=499 => "\x1b[33m",
+        _ => "\x1b[31m",
     };
-    println!("  {color}{status}\x1b[0m  {method} {path}");
+    println!("  {c}{status}\x1b[0m  {method} {path}");
 }
 
-/// 在系统默认浏览器中打开 URL。
 fn open_in_browser(url: &str) {
     #[cfg(target_os = "macos")]
     let _ = Command::new("open").arg(url).spawn();
-
     #[cfg(target_os = "windows")]
     let _ = Command::new("cmd").args(["/C", "start", url]).spawn();
-
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     let _ = Command::new("xdg-open").arg(url).spawn();
 }
