@@ -8,4 +8,8 @@
 
 == 2026
 
-- #link("2026_04_25-ros2_dds_qos/")[ROS2、DDS 与 QoS]
+#tufted.blog-entry(
+  date: "2026-04-25",
+  path: "2026_04_25-ros2_dds_qos/",
+  title: "ROS2、DDS 与 QoS",
+)
