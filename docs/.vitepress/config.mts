@@ -2,7 +2,7 @@ import footnote from "markdown-it-footnote";
 import { defineConfig } from "vitepress";
 import { RSSOptions, RssPlugin } from "vitepress-plugin-rss";
 
-const baseUrl = 'https://stupeter12138.github.io/wiki/'
+const baseUrl = 'https://stupeter12138.github.io/'
 const RSS: RSSOptions = {
   title: '魔法窝瓜',
   baseUrl,
@@ -16,7 +16,7 @@ export default defineConfig({
 
   srcDir: "./",
 
-  base: "/wiki/",
+  base: "/",
 
   ignoreDeadLinks: true,
 
@@ -45,7 +45,7 @@ export default defineConfig({
 
     editLink: {
       pattern:
-        "https://github.com/stuPETER12138/wiki/edit/main/docs/:path",
+        "https://github.com/stuPETER12138/stuPETER12138.github.io/edit/main/docs/:path",
       text: "在 GitHub 上编辑此页面",
     },
 

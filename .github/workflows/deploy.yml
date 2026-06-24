@@ -28,9 +28,9 @@ jobs:
         with:
           fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
       - name: Set pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10.30.3
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
