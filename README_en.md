@@ -16,8 +16,6 @@ This is a static website building template based on [Typst](https://typst.app/) 
 If you want to quickly experience the website style, you can visit [Demo Website](https://tufted-blog.pages.dev/).
 Update log available at [Changelog](CHANGELOG_en.md) .
 
-![Tufted website](content/imgs/devices.webp)
-
 > If you are a complete beginner, you may encounter some new concepts and might be using the terminal and command line for the first time. Don't be afraid, this project requires no prior knowledge and is very beginner-friendly.  
 > When you encounter unfamiliar concepts or operations, read the documentation, ask AI, and search online.  
 > If you encounter any issues, you can: check the [Wiki Documentation](https://github.com/Yousa-Mirage/Tufted-Blog-Template/wiki), ask questions and discuss in [Discussions](https://github.com/Yousa-Mirage/Tufted-Blog-Template/discussions), or submit feedback in [Issues](https://github.com/Yousa-Mirage/Tufted-Blog-Template/issues).
