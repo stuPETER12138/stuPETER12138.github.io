@@ -35,3 +35,11 @@ Thumbs.db
 
 # todo
 TODO.md
+
+# docs
+Docs/
+
+# images
+content/**/imgs/**/*.jpg
+content/**/imgs/**/*.jpeg
+content/**/imgs/**/*.png
