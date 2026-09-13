@@ -1,0 +1,33 @@
+{
+  "title": "你的姓名 · Academic Homepage",
+  "url": "https://stupeter12138.github.io/",
+  "language": "zh-CN",
+  "description": "个人学术主页：研究方向、学术成果与最新动态。请在 site.json 中替换为你的个人介绍。",
+  "name": "你的姓名",
+  "englishName": "Your Name",
+  "initials": "YN",
+  "role": "你的职位 / 学位阶段",
+  "department": "院系 / 实验室",
+  "institution": "你的学校或研究机构",
+  "location": "城市，中国",
+  "email": "",
+  "portrait": "",
+  "cv": "",
+  "tagline": "保持好奇，探索未知。",
+  "intro": "欢迎来到我的学术主页。我是 [学校 / 机构] 的 [职位 / 学位阶段]，主要关注 [研究领域]。我希望通过严谨的研究与开放的交流，让想法成为有价值的成果。",
+  "about": [
+    "在这里介绍你的研究背景、正在探索的问题，以及希望解决的挑战。相比于罗列关键词，一段清晰的研究叙述能让访客更快理解你的工作。",
+    "你也可以补充导师、所在研究组和合作经历。所有方括号及示例内容都只是填写提示，请在发布前替换为真实信息。"
+  ],
+  "social": [
+    { "label": "GitHub", "url": "https://github.com/stuPETER12138" }
+  ],
+  "research": [
+    { "number": "01", "title": "研究方向一", "description": "用一两句话描述你关注的核心问题、方法，以及研究的意义。", "tags": ["研究主题", "关键方法"] },
+    { "number": "02", "title": "研究方向二", "description": "介绍另一条研究主线，或与你当前工作相关的跨学科探索。", "tags": ["交叉学科", "应用场景"] },
+    { "number": "03", "title": "研究方向三", "description": "分享你正在探索的新想法，以及希望开展合作的方向。", "tags": ["开放问题", "未来探索"] }
+  ],
+  "news": [],
+  "experience": [],
+  "footerNote": "以好奇心为起点，以严谨为路径。"
+}

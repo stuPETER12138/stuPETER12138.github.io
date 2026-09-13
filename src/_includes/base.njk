@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="{{ site.description | escape }}">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>{{ title or site.title }}</title>
+  <link rel="canonical" href="{{ page.url | absoluteUrl(site.url) }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ (title or site.title) | escape }}">
+  <meta property="og:description" content="{{ site.description | escape }}">
+  <meta property="og:url" content="{{ page.url | absoluteUrl(site.url) }}">
+  <link rel="icon" href="{{ '/assets/favicon.svg' | url }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}">
+  <script src="{{ '/assets/js/main.js' | url }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳至主要内容</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="{{ '/' | url }}" aria-label="{{ site.name }}的主页"><span class="brand-mark" aria-hidden="true">{{ site.initials }}</span><span>{{ site.englishName }}<span class="brand-dot">.</span></span></a>
+      <nav aria-label="主导航">
+        <a href="{{ '/' | url }}#about">关于</a>
+        <a href="{{ '/' | url }}#research">研究</a>
+        <a href="{{ '/' | url }}#publications">成果</a>
+        <a href="{{ '/' | url }}#contact">联系</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="切换至深色主题" title="切换主题" hidden><span aria-hidden="true">◐</span></button>
+    </div>
+  </header>
+  <main id="main">{{ content | safe }}</main>
+  <footer class="site-footer"><div><span>© {{ '' | year }} {{ site.name }}.</span><span>{{ site.footerNote }}</span></div><a href="https://www.11ty.dev/">Built with Eleventy ↗</a></footer>
+</body>
+</html>

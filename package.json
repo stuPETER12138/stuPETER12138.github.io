@@ -1,0 +1,20 @@
+{
+  "name": "academic-homepage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An elegant academic homepage built with Eleventy",
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy",
+    "test": "node --test --test-isolation=none scripts/publications.test.mjs && npm run build && node scripts/check-build.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@citation-js/core": "^0.8.2",
+    "@citation-js/plugin-bibtex": "^0.8.2"
+  }
+}
