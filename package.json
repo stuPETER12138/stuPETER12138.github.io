@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "test": "node --test --test-isolation=none scripts/publications.test.mjs && npm run build && node scripts/check-build.mjs"
+    "test": "node scripts/publications.test.mjs && npm run build && node scripts/check-build.mjs"
   },
   "engines": {
     "node": ">=22"

@@ -17,7 +17,7 @@ npm run dev
 
 ```sh
 npm run build  # 生成 _site/
-npm test       # 构建并检查章节、资源、内部链接、元数据与站点地图
+npm test       # BibTeX 解析测试 + 构建 + 检查章节、资源、内部链接、元数据与站点地图
 ```
 
 `_site/` 与 `node_modules/` 不提交到 Git。`package-lock.json` 必须提交，GitHub Actions 使用 `npm ci` 安装锁定版本。
@@ -94,6 +94,10 @@ JSON 字符串内容按纯文本展示，不需要写 HTML；使用有效 JSON�
 - 论文区域提供“下载 BibTeX”按钮，发布时原始 `papers.bib` 会复制到网站根目录公开下载。不要在该文件中存放私人注释或未公开资料。
 
 样式文件 `src/assets/css/style.css` 按设计变量、导航、个人资料、栏目、论文、响应式和打印样式分区组织。移动端完整保留作者名单和论文标题，不截断长内容。
+
+#### 测试命令
+
+`npm test` 直接执行 `node scripts/publications.test.mjs`。该测试脚本自带极简断言运行器，不依赖 `node --test`，也不使用 `--test-isolation` 等版本相关参数或子进程，因此在本地和 CI 的不同 Node 版本上行为一致。测试失败时脚本以非零状态退出，使 GitHub Actions 构建失败，避免错误内容上线。
 
 ### 添加教育或研究经历
 

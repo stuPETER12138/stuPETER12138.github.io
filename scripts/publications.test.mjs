@@ -1,7 +1,11 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parsePublications } from './publications.mjs';
+
+// Self-contained runner: no `node --test` flags or child processes, so the same
+// command works on every supported Node version and inside restricted sandboxes.
+const tests = [];
+const test = (name, fn) => tests.push({ name, fn });
 
 test('provided bibliography renders both papers without inventing a DOI', async () => {
   const papers = parsePublications(await readFile(new URL('../papers.bib', import.meta.url), 'utf8'));
@@ -93,3 +97,17 @@ test('invalid entries fail instead of disappearing silently', () => {
   assert.throws(() => parsePublications('@misc{x,year={2026}}'), /Missing BibTeX title/);
   assert.throws(() => parsePublications('@misc{x,title={A}} @misc{x,title={B}}'), /Duplicate BibTeX key/);
 });
+
+let failed = 0;
+for (const { name, fn } of tests) {
+  try {
+    await fn();
+    console.log(`✔ ${name}`);
+  } catch (error) {
+    failed += 1;
+    console.error(`✖ ${name}`);
+    console.error(error);
+  }
+}
+console.log(`\n${tests.length - failed} passed, ${failed} failed, ${tests.length} total`);
+if (failed) process.exitCode = 1;
